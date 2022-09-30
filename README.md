@@ -10,7 +10,7 @@
   
   <p align="center">
     <br />
-    <a href="https://github.com/CodExorcist/Code4Life/source"><strong>Explore »</strong></a>
+    <a href="https://github.com/CodExorcist/Code4Life/tree/main/source"><strong>Explore »</strong></a>
     <br />
     <br />
   </p>
