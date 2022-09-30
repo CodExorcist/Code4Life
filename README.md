@@ -6,11 +6,11 @@
 <br />
 <div align="center">
 <h3 align="center">Code4Life Solution Project</h3>
-    This is personal project to record the game progress.
+    This is personal project to record the game progress. Just for my own fun =)
   
   <p align="center">
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/CodExorcist/Code4Life/source"><strong>Explore »</strong></a>
     <br />
     <br />
   </p>
@@ -25,7 +25,12 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#league">League</a></li>
+    <li>
+        <a href="#league">League</a>
+        <ul>
+            <li><a href="#wood-league">Wood League</li>
+        </ul>
+    </li>
   </ol>
 </details>
 
@@ -34,8 +39,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-<!-- [![Game Screen Shot][game-screenshot]](https://www.codingame.com/ide/puzzle/code4life) -->
+[![Game Screen Shot][game-screenshot]](https://www.codingame.com/ide/puzzle/code4life)
 
 The main purpose for this repository to share on my idea to play the Code4Life game.
 
@@ -44,11 +48,15 @@ The main purpose for this repository to share on my idea to play the Code4Life g
 
 
 <!-- League -->
-## Wood League
+## League
 
-<p>
-    <img src="images/Code4Life State Diagram.drawio.png" alt="Logo" width="600" height="600">
-</p>
+The game difficulty will be increase as the progress.
+
+### Wood League
+
+<img src="images/Code4Life State Diagram.drawio.png" alt="Logo" width="640" height="600">
+
+The game start with this difficulty, with the conditions given, the state diagram for robot complete the work as above.
 
 
 
@@ -58,4 +66,4 @@ The main purpose for this repository to share on my idea to play the Code4Life g
 [game-url]: https://www.codingame.com/ide/puzzle/code4life
 [profile-shield]: https://img.shields.io/badge/PROFILE-profile-blueviolet
 [profile-url]: https://www.codingame.com/profile/4842990ea3d4215bd2f3b15da061690f7805392
-[game-screenshot]: images/Code4Life Sample.gif
+[game-screenshot]: images/Code4Life_Sample.gif
