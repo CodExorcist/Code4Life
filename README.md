@@ -5,14 +5,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-<h3 align="center">project_title</h3>
-
+<h3 align="center">Code4Life Solution Project</h3>
+    This is personal project to record the game progress.
+  
   <p align="center">
-    project_description
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
@@ -29,7 +25,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#league">League</a></li>
   </ol>
 </details>
 
@@ -39,22 +35,20 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
+<!-- [![Game Screen Shot][game-screenshot]](https://www.codingame.com/ide/puzzle/code4life) -->
+
+The main purpose for this repository to share on my idea to play the Code4Life game.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- League -->
+## Wood League
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+<p>
+    <img src="images/Code4Life State Diagram.drawio.png" alt="Logo" width="600" height="600">
+</p>
 
 
 
@@ -64,3 +58,4 @@
 [game-url]: https://www.codingame.com/ide/puzzle/code4life
 [profile-shield]: https://img.shields.io/badge/PROFILE-profile-blueviolet
 [profile-url]: https://www.codingame.com/profile/4842990ea3d4215bd2f3b15da061690f7805392
+[game-screenshot]: images/Code4Life Sample.gif
