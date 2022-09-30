@@ -57,15 +57,15 @@ class Robot:
     
     def goto_diagnosis(self)->bool:        
         print("GOTO DIAGNOSIS")
-        return True
+        return False
 
     def goto_molecules(self)->bool:
         print("GOTO MOLECULES")
-        return True
+        return False
 
     def goto_laboratory(self)->bool:
         print("GOTO LABORATORY")
-        return True
+        return False
 
     def connect(self, _id):
         print(f"CONNECT {_id}")
@@ -99,14 +99,14 @@ class Robot:
 
     # Robot Action --------------------------------------------------------------
     
-    def take_molecule(self, _id):
+    def __take_molecule(self, _id):
         self.connect(_id)
         self.storages[_id] += 1
 
-    def produce_medicine(self, sample_id):
+    def __produce_medicine(self, sample_id):
         self.connect(sample_id)
 
-    def remove_molecules_for_sample(self, sample):
+    def __remove_molecules_for_sample(self, sample):
         self.storages["A"] -= sample.cost[0]
         self.storages["B"] -= sample.cost[1]
         self.storages["C"] -= sample.cost[2]
@@ -128,9 +128,9 @@ class Robot:
     def consume_next_sample(self)->bool:
         for sample in self.sample_datas: 
             if self.is_sample_fulfill(sample):
-                self.produce_medicine(sample.ID)
+                self.__produce_medicine(sample.ID)
                 self.sample_datas.remove(sample)    
-                self.remove_molecules_for_sample(sample)
+                self.__remove_molecules_for_sample(sample)
                 return True
 
         return False
@@ -142,7 +142,7 @@ class Robot:
         for sample in self.sample_datas:
             if not self.is_sample_fulfill(sample):
                 cost = self.which_cost_not_fulfill(sample)
-                self.take_molecule(cost)
+                self.__take_molecule(cost)
                 return True
             else: 
                 continue
@@ -174,6 +174,11 @@ Functions ----------------------------------------------------------------------
 def initialize_states():
     states.append(State(RobotState.START, RobotState.DIAGNOSIS, robot.goto_diagnosis))
     states.append(State(RobotState.DIAGNOSIS, RobotState.DIAGNOSIS, robot.take_next_molecule))
+    states.append(State(RobotState.DIAGNOSIS, RobotState.MOLECULE, robot.goto_molecules))
+    states.append(State(RobotState.MOLECULE, RobotState.MOLECULE, robot.take_next_molecule))
+    states.append(State(RobotState.MOLECULE, RobotState.LABORATORY, robot.goto_laboratory))
+    states.append(State(RobotState.LABORATORY, RobotState.LABORATORY, robot.consume_next_sample))
+    states.append(State(RobotState.LABORATORY, RobotState.LABORATORY), robot.goto_diagnosis)
     return
 
 def get_next_state_index(c_index)->RobotState:
