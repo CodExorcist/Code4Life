@@ -64,4 +64,3 @@
 [game-url]: https://www.codingame.com/ide/puzzle/code4life
 [profile-shield]: https://img.shields.io/badge/PROFILE-profile-blueviolet
 [profile-url]: https://www.codingame.com/profile/4842990ea3d4215bd2f3b15da061690f7805392
-![Code4Life State Diagram drawio](https://user-images.githubusercontent.com/29519299/193196606-d8358f2c-661f-4db1-83c0-ba3a41331528.png)
