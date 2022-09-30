@@ -1,5 +1,6 @@
 import sys
 import math
+from enum import Enum
 
 # Bring data on patient samples from the diagnosis machine to the laboratory with enough molecules to produce medicine!
 # To debug: print("Debug messages...", file=sys.stderr, flush=True)
@@ -11,9 +12,27 @@ DIAGNOSIS = "DIAGNOSIS"
 MOLECULES = "MOLECULES"
 LABORATORY = "LABORATORY"
 
+class RobotState(Enum):
+    START = 0
+    DIAGNOSIS = 1
+    MOLECULE = 2
+    LABORATORY = 3
+
 """
 Classes ----------------------------------------------------------------------
 """
+
+class State:
+
+    def __init__(self, c_index=RobotState.START, n_index=RobotState.START, func=lambda: False):
+        self.current_state_index = c_index
+        self.next_state_index = n_index
+        self.action = func
+        return    
+
+    def execute(self):
+        self.action()
+
 
 class SampleData:
     
@@ -28,32 +47,47 @@ class SampleData:
         
 class Robot:
 
-    def __init__(self, location=None, storages={}, sample_datas=[]):
+    def __init__(self, location=None, storages={}, sample_datas=[], state=None):
         self.location = location
         self.storages = storages
         self.sample_datas = sample_datas
+        self.state = state
 
     # Game Action ---------------------------------------------------------------
     
-    def goto_diagnosis(self):        
+    def goto_diagnosis(self)->bool:        
         print("GOTO DIAGNOSIS")
+        return True
 
-    def goto_molecules(self):
+    def goto_molecules(self)->bool:
         print("GOTO MOLECULES")
+        return True
 
-    def goto_laboratory(self):
+    def goto_laboratory(self)->bool:
         print("GOTO LABORATORY")
+        return True
 
     def connect(self, _id):
         print(f"CONNECT {_id}")
 
     # Status Checking -----------------------------------------------------------
 
-    def is_storage_full(self):
+    def is_sample_data_full(self)->bool:
+        return len(self.sample_datas) >= 3
+
+    def is_storage_full(self)->bool:
         return sum(self.storages.values()) == 10
 
+    def which_cost_not_fulfill(self, sample)->str:
+        if sample.cost_a > self.storages["A"]: return "A"
+        elif sample.cost_b > self.storages["B"]: return "B"
+        elif sample.cost_c > self.storages["C"]: return "C"
+        elif sample.cost_d > self.storages["D"]: return "D"
+        elif sample.cost_ed > self.storages["E"]: return "E"
+        else: return ""
+
+
     def is_sample_fulfill(self, sample):
-        fulfill = True
 
         if sample.cost_a > self.storages["A"]: return False
         elif sample.cost_b > self.storages["B"]: return False
@@ -65,15 +99,6 @@ class Robot:
 
     # Robot Action --------------------------------------------------------------
     
-    def take_sample(self, sample_data)->bool:
-        if len(self.sample_datas) >= 3: return False
-
-        if sample_data.is_cloud_data():
-            self.connect(sample_data.ID)
-            self.sample_datas.append(sample_data)
-
-        return True    
-
     def take_molecule(self, _id):
         self.connect(_id)
         self.storages[_id] += 1
@@ -88,29 +113,90 @@ class Robot:
         self.storages["D"] -= sample.cost[3]
         self.storages["E"] -= sample.cost[4]
 
-    def consume_all_sample(self):
+    # Robot Main Action --------------------------------------------------------------
+
+    def take_sample(self, sample_data)->bool:
+        if self.is_sample_data_full(): 
+            return False
+
+        if sample_data.is_cloud_data():
+            self.connect(sample_data.ID)
+            self.sample_datas.append(sample_data)        
+
+        return True    
+
+    def consume_next_sample(self)->bool:
         for sample in self.sample_datas: 
             if self.is_sample_fulfill(sample):
                 self.produce_medicine(sample.ID)
                 self.sample_datas.remove(sample)    
                 self.remove_molecules_for_sample(sample)
-            else:
-                return
+                return True
 
-    def goto_lab_and_produce_all(self):
-        if self.location != LABORATORY:
-            self.goto_laboratory()
+        return False
 
-        self.consume_all_sample()
+    def take_next_molecule(self)->bool:    
+        if self.is_storage_full():
+            return False
+
+        for sample in self.sample_datas:
+            if not self.is_sample_fulfill(sample):
+                cost = self.which_cost_not_fulfill(sample)
+                self.take_molecule(cost)
+                return True
+            else: 
+                continue
+
+        return False
+
+    # Robot State --------------------------------------------------------------
+
+    def update_state(self, next_state_index):
+        c_index = self.state.next_state_index
+        self.state = get_next_state(c_index, next_state_index)
+        return
+
+    def goto_next_state(self):
+        self.update_state(get_next_state_index(self.state.current_state_index))
+        return
+
+    def execute_state(self)->bool:
+        return self.state.action()
 
 """
 End Classes ----------------------------------------------------------------------
+"""
+
+"""
+Functions ----------------------------------------------------------------------
+"""
+
+def initialize_states():
+    states.append(State(RobotState.START, RobotState.DIAGNOSIS, robot.goto_diagnosis))
+    states.append(State(RobotState.DIAGNOSIS, RobotState.DIAGNOSIS, robot.take_next_molecule))
+    return
+
+def get_next_state_index(c_index)->RobotState:
+    if c_index == RobotState.LABORATORY: return RobotState.DIAGNOSIS
+    
+    return c_index + 1
+
+
+def get_next_state(c_index, n_index)->State:
+    state = next(filter(lambda s: s.current_state_index == c_index and 
+                                  s.next_state_index == n_index, states))    
+    return state
+
+
+"""
+End Functions ----------------------------------------------------------------------
 """
 
 """ 
 Game -----------------------------------------------------------------------------
 """
 
+states = []
 robot = Robot()
 
 project_count = int(input())
@@ -120,6 +206,8 @@ for i in range(project_count):
 
 # game loop
 while True:
+    all_samples = []
+
     # game stat for this loop
     for i in range(2):
         inputs = input().split()
@@ -159,10 +247,11 @@ while True:
 
         sample = SampleData(sample_id, carried_by, health, 
                             (cost_a, cost_b, cost_c, cost_d, cost_e))
-        
-        while robot.location == DIAGNOSIS:
-            if robot.take_sample(sample) == False: break
-
+        all_samples.append(sample)
+    
+    while not robot.execute_state(): 
+        robot.goto_next_state()
+        continue
 
 
 
