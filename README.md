@@ -60,7 +60,7 @@ The game start with this difficulty, with the conditions given, the state diagra
 
 ### Wood 1 League
 
-<img src="images/Wood_1_League_2.png" alt="Logo" width="800" height="600">
+<img src="images/Wood_1_League_2.png" alt="Logo" width="500" height="800">
 
 After Wood 2 League complete, the game proceed to Wood 1 League difficulty, the state diagram design for the bot.
 
