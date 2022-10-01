@@ -52,11 +52,17 @@ The main purpose for this repository to share on my idea to play the Code4Life g
 
 The game difficulty will be increase as the progress.
 
-### Wood League
+### Wood 2 League
 
 <img src="images/Code4Life State Diagram.drawio.png" alt="Logo" width="640" height="600">
 
 The game start with this difficulty, with the conditions given, the state diagram for robot complete the work as above.
+
+### Wood 1 League
+
+<img src="images/Wood_1_League_2.png" alt="Logo" width="500" height="800">
+
+After Wood 2 League complete, the game proceed to Wood 1 League difficulty, the state diagram design for the bot.
 
 
 
