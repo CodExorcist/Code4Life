@@ -137,13 +137,13 @@ class Robot:
     # Robot Action --------------------------------------------------------------
 
     # download sample from diagnosis
-    def __download_sample(self, sample_data):
+    def __download_cloud_sample(self, sample_data):
         self.connect(sample_data.ID)
         self.sample_datas += sample_data
         transfer_from_cloud(sample_data)
 
     # upload sample from diagnosis
-    def __upload_sample(self, sample_data):
+    def __upload_sample_to_cloud(self, sample_data):
         self.connect(sample_data.ID)
         self.sample_datas.remove(sample_data)
         transfer_to_cloud(sample_data)
@@ -167,7 +167,7 @@ class Robot:
         self.connect(sample_id)
 
     def __remove_molecules_for_sample(self, sample):
-        for k, v in sample.cost: self.storages[k] -= v
+        for k,v in sample.cost: self.storages[k] -= v
 
     def sync_carrying_sample(self, all_samples):
         for self_sample in self.sample_datas: 
@@ -179,9 +179,12 @@ class Robot:
 
     # Robot Main Action --------------------------------------------------------------
 
-    def download_sample_data(self)->bool:
+    def download_raw_sample_data(self)->bool:
+        # Download Rank 3 sample
+        if self.is_sample_data_full():
+            return False
+
         self.connect(3)
-        self.goto_next_state()
         return True    
 
     def take_next_sample(self)->bool:
